@@ -5,6 +5,17 @@
 
 */
 
+#if !defined _samp_included
+	#error "Please include a_samp or a_npc before getspawninfo"
+#endif
+
+#if defined _getspawninfo_included
+	#endinput
+#endif
+
+#define _getspawninfo_included
+#pragma library getspawninfo
+
 /*
 	Vars
 */
