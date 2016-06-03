@@ -14,7 +14,6 @@
 #endif
 
 #define _getspawninfo_included
-#pragma library getspawninfo
 
 /*
 	Vars
@@ -62,7 +61,7 @@ stock spawninfo_SetSpawnInfo(playerid, team, skin,
 #else
 	#define _ALS_SetSpawnInfo
 #endif
- 
+
 #define SetSpawnInfo spawninfo_SetSpawnInfo
 
 stock GetSpawnInfo(playerid, &team = NO_TEAM, &skin = 0,
