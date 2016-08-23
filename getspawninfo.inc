@@ -16,45 +16,128 @@
 #define _getspawninfo_included
 
 /*
+	Defines
+*/
+
+#define MAX_PLAYER_CLASS 320
+
+/*
+	Enums
+*/
+
+enum e_Spawn_Info {
+	bool:e_sIsUsed,
+	e_sTeam,
+	e_sSkin,
+	Float:e_sPosX,
+	Float:e_sPosY,
+	Float:e_sPosZ,
+	Float:e_sRotation,
+	e_sWeapon1,
+	e_sWeapon1_Ammo,
+	e_sWeapon2,
+	e_sWeapon2_Ammo,
+	e_sWeapon3,
+	e_sWeapon3_Ammo,
+}
+
+/*
 	Vars
 */
 
 static
-	gInfoTeam[MAX_PLAYERS char],
-	gInfoSkin[MAX_PLAYERS],
-	Float:gInfoPosX[MAX_PLAYERS],
-	Float:gInfoPosY[MAX_PLAYERS],
-	Float:gInfoPosZ[MAX_PLAYERS],
-	Float:gInfoRotation[MAX_PLAYERS],
-	gInfoWeapon1[MAX_PLAYERS char],
-	gInfoWeapon1_Ammo[MAX_PLAYERS],
-	gInfoWeapon2[MAX_PLAYERS char],
-	gInfoWeapon2_Ammo[MAX_PLAYERS],
-	gInfoWeapon3[MAX_PLAYERS char],
-	gInfoWeapon3_Ammo[MAX_PLAYERS];
+	gPlayerSpawn[MAX_PLAYERS][e_Spawn_Info],
+	gPlayerClass[MAX_PLAYER_CLASS][e_Spawn_Info];
 
 /*
-	Functions
+	AddPlayerClass
 */
 
-stock spawninfo_SetSpawnInfo(playerid, team, skin,
+stock SpawnInfo_AddPlayerClass(skin,
+                               Float:x, Float:y, Float:z, Float:angle,
+                               weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo)
+{
+	new classid = AddPlayerClass(skin, x, y, z, angle,
+	                             weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo);
+	gPlayerClass[classid][e_sIsUsed] = true;
+	gPlayerClass[classid][e_sTeam] = NO_TEAM;
+	gPlayerClass[classid][e_sSkin] = skin;
+	gPlayerClass[classid][e_sPosX] = x;
+	gPlayerClass[classid][e_sPosY] = y;
+	gPlayerClass[classid][e_sPosZ] = z;
+	gPlayerClass[classid][e_sRotation] = angle;
+	gPlayerClass[classid][e_sWeapon1] = weapon1;
+	gPlayerClass[classid][e_sWeapon1_Ammo] = weapon1_ammo;
+	gPlayerClass[classid][e_sWeapon2] = weapon2;
+	gPlayerClass[classid][e_sWeapon2_Ammo] = weapon2_ammo;
+	gPlayerClass[classid][e_sWeapon3] = weapon3;
+	gPlayerClass[classid][e_sWeapon3_Ammo] = weapon3_ammo;
+	return classid;
+}
+#if defined _ALS_AddPlayerClass
+	#undef AddPlayerClass
+#else
+	#define _ALS_AddPlayerClass
+#endif
+
+#define AddPlayerClass SpawnInfo_AddPlayerClass
+
+/*
+	AddPlayerClassEx
+*/
+
+stock SpawnInfo_AddPlayerClassEx(teamid, skin,
+                                 Float:x, Float:y, Float:z, Float:angle,
+                                 weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo)
+{
+	new classid = AddPlayerClassEx(teamid, skin, x, y, z, angle,
+	                               weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo);
+	gPlayerClass[classid][e_sIsUsed] = true;
+	gPlayerClass[classid][e_sTeam] = teamid;
+	gPlayerClass[classid][e_sSkin] = skin;
+	gPlayerClass[classid][e_sPosX] = x;
+	gPlayerClass[classid][e_sPosY] = y;
+	gPlayerClass[classid][e_sPosZ] = z;
+	gPlayerClass[classid][e_sRotation] = angle;
+	gPlayerClass[classid][e_sWeapon1] = weapon1;
+	gPlayerClass[classid][e_sWeapon1_Ammo] = weapon1_ammo;
+	gPlayerClass[classid][e_sWeapon2] = weapon2;
+	gPlayerClass[classid][e_sWeapon2_Ammo] = weapon2_ammo;
+	gPlayerClass[classid][e_sWeapon3] = weapon3;
+	gPlayerClass[classid][e_sWeapon3_Ammo] = weapon3_ammo;
+	return classid;
+}
+#if defined _ALS_AddPlayerClassEx
+	#undef AddPlayerClassEx
+#else
+	#define _ALS_AddPlayerClassEx
+#endif
+
+#define AddPlayerClassEx SpawnInfo_AddPlayerClassEx
+
+/*
+	SetSpawnInfo
+*/
+
+stock SpawnInfo_SetSpawnInfo(playerid, team, skin,
                              Float:x, Float:y, Float:z, Float:rotation,
                              weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo)
 {
-	gInfoTeam{playerid} = team;
-	gInfoSkin[playerid] = skin;
-	gInfoPosX[playerid] = x;
-	gInfoPosY[playerid] = y;
-	gInfoPosZ[playerid] = z;
-	gInfoRotation[playerid] = rotation;
-	gInfoWeapon1{playerid} = weapon1;
-	gInfoWeapon1_Ammo[playerid] = weapon1_ammo;
-	gInfoWeapon2{playerid} = weapon2;
-	gInfoWeapon2_Ammo[playerid] = weapon2_ammo;
-	gInfoWeapon3{playerid} = weapon3;
-	gInfoWeapon3_Ammo[playerid] = weapon3_ammo;
-
-	return SetSpawnInfo(playerid, team, skin, x, y, z, rotation, weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo);
+	gPlayerSpawn[playerid][e_sIsUsed] = true;
+	gPlayerSpawn[playerid][e_sTeam] = team;
+	gPlayerSpawn[playerid][e_sSkin] = skin;
+	gPlayerSpawn[playerid][e_sPosX] = x;
+	gPlayerSpawn[playerid][e_sPosY] = y;
+	gPlayerSpawn[playerid][e_sPosZ] = z;
+	gPlayerSpawn[playerid][e_sRotation] = angle;
+	gPlayerSpawn[playerid][e_sWeapon1] = weapon1;
+	gPlayerSpawn[playerid][e_sWeapon1_Ammo] = weapon1_ammo;
+	gPlayerSpawn[playerid][e_sWeapon2] = weapon2;
+	gPlayerSpawn[playerid][e_sWeapon2_Ammo] = weapon2_ammo;
+	gPlayerSpawn[playerid][e_sWeapon3] = weapon3;
+	gPlayerSpawn[playerid][e_sWeapon3_Ammo] = weapon3_ammo;
+	return SetSpawnInfo(playerid, team, skin, x, y, z, rotation,
+	                    weapon1, weapon1_ammo, weapon2, weapon2_ammo, weapon3, weapon3_ammo);
 }
 #if defined _ALS_SetSpawnInfo
 	#undef SetSpawnInfo
@@ -62,22 +145,78 @@ stock spawninfo_SetSpawnInfo(playerid, team, skin,
 	#define _ALS_SetSpawnInfo
 #endif
 
-#define SetSpawnInfo spawninfo_SetSpawnInfo
+#define SetSpawnInfo SpawnInfo_SetSpawnInfo
+
+/*
+	OnPlayerConnect
+*/
+
+public OnPlayerConnect(playerid)
+{
+	gPlayerSpawn[playerid][e_sIsUsed] = false;
+
+	#if defined SpawnInfo_OnPlayerConnect
+		return SpawnInfo_OnPlayerConnect(playerid);
+	#else
+		return 1;
+	#endif
+}
+#if defined _ALS_OnPlayerConnect
+	#undef OnPlayerConnect
+#else
+	#define _ALS_OnPlayerConnect
+#endif
+
+#define OnPlayerConnect SpawnInfo_OnPlayerConnect
+#if defined SpawnInfo_OnPlayerConnect
+	forward SpawnInfo_OnPlayerConnect(playerid);
+#endif
+
+/*
+	OnPlayerRequestClass
+*/
+
+public OnPlayerRequestClass(playerid, classid)
+{
+	if (!gPlayerSpawn[playerid][e_sIsUsed]) {
+		gPlayerSpawn[playerid] = gPlayerClass[classid];
+	}
+
+	#if defined SpawnInfo_OnPlayerRequestClass
+		return SpawnInfo_OnPlayerRequestClass(playerid, classid);
+	#else
+		return 1;
+	#endif
+}
+#if defined _ALS_OnPlayerRequestClass
+	#undef OnPlayerRequestClass
+#else
+	#define _ALS_OnPlayerRequestClass
+#endif
+
+#define OnPlayerRequestClass SpawnInfo_OnPlayerRequestClass
+#if defined SpawnInfo_OnPlayerRequestClass
+	forward SpawnInfo_OnPlayerRequestClass(playerid, classid);
+#endif
+
+/*
+	GetSpawnInfo
+*/
 
 stock GetSpawnInfo(playerid, &team = NO_TEAM, &skin = 0,
                    &Float:x = 0.0, &Float:y = 0.0, &Float:z = 0.0, &Float:rotation = 0.0,
                    &weapon1 = 0, &weapon1_ammo = 0, &weapon2 = 0, &weapon2_ammo = 0, &weapon3 = 0, &weapon3_ammo = 0)
 {
-	team = gInfoTeam{playerid};
-	skin = gInfoSkin[playerid];
-	x = gInfoPosX[playerid];
-	y = gInfoPosY[playerid];
-	z = gInfoPosZ[playerid];
-	rotation = gInfoRotation[playerid];
-	weapon1 = gInfoWeapon1{playerid};
-	weapon1_ammo = gInfoWeapon1_Ammo[playerid];
-	weapon2 = gInfoWeapon2{playerid};
-	weapon2_ammo = gInfoWeapon2_Ammo[playerid];
-	weapon3 = gInfoWeapon3{playerid};
-	weapon3_ammo = gInfoWeapon3_Ammo[playerid];
+	team = gPlayerSpawn[playerid][e_sTeam];
+	skin = gPlayerSpawn[playerid][e_sSkin];
+	x = gPlayerSpawn[playerid][e_sPosX];
+	y = gPlayerSpawn[playerid][e_sPosY];
+	z = gPlayerSpawn[playerid][e_sPosZ];
+	rotation = gPlayerSpawn[playerid][e_sRotation];
+	weapon1 = gPlayerSpawn[playerid][e_sWeapon1];
+	weapon1_ammo = gPlayerSpawn[playerid][e_sWeapon1_Ammo];
+	weapon2 = gPlayerSpawn[playerid][e_sWeapon2];
+	weapon2_ammo = gPlayerSpawn[playerid][e_sWeapon2_Ammo];
+	weapon3 = gPlayerSpawn[playerid][e_sWeapon3];
+	weapon3_ammo = gPlayerSpawn[playerid][e_sWeapon3_Ammo];
 }
