@@ -129,7 +129,7 @@ stock SpawnInfo_SetSpawnInfo(playerid, team, skin,
 	gPlayerSpawn[playerid][e_sPosX] = x;
 	gPlayerSpawn[playerid][e_sPosY] = y;
 	gPlayerSpawn[playerid][e_sPosZ] = z;
-	gPlayerSpawn[playerid][e_sRotation] = angle;
+	gPlayerSpawn[playerid][e_sRotation] = rotation;
 	gPlayerSpawn[playerid][e_sWeapon1] = weapon1;
 	gPlayerSpawn[playerid][e_sWeapon1_Ammo] = weapon1_ammo;
 	gPlayerSpawn[playerid][e_sWeapon2] = weapon2;
